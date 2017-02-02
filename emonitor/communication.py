@@ -93,6 +93,10 @@ class TelegramBot(Communicator):
             upd.dispatcher.add_handler(CommandHandler("Start", TelegramBot.msg_start, pass_args=True))
             upd.dispatcher.add_handler(CommandHandler("hilfe", TelegramBot.msg_help, pass_args=True))
             upd.dispatcher.add_handler(CommandHandler("Hilfe", TelegramBot.msg_help, pass_args=True))
+            upd.dispatcher.add_handler(CommandHandler("help", TelegramBot.msg_help, pass_args=True))
+            upd.dispatcher.add_handler(CommandHandler("Help", TelegramBot.msg_help, pass_args=True))
+            upd.dispatcher.add_handler(CommandHandler("ja", TelegramBot.msg_ja, pass_args=True))
+            upd.dispatcher.add_handler(CommandHandler("nein", TelegramBot.msg_nein, pass_args=True))
             upd.dispatcher.add_handler(CallbackQueryHandler(TelegramBot.msg_responder))
 
     def start(self):
@@ -205,8 +209,33 @@ class TelegramBot(Communicator):
         msgtext = Settings.get('telegramsettings')['helpmsg'] or babel.gettext('telegram.default.helpmsg')
         bot.sendMessage(update.message.chat_id, msgtext, parse_mode='Markdown')
         TelegramBot.logger.debug("help_msg sent.")
-
-
+        
+    @staticmethod
+    def msg_ja(bot, update, **kwargs):
+        """
+        send yes to defined persons after an alarm
+        :param bot:
+        :param update:
+        :param kwargs:
+        """
+        msgtext = "Einsatzteilnahme positiv."
+        bot.sendMessage(update.message.chat_id, msgtext, parse_mode='Markdown')
+        msgtext = Settings.get('telegramsettings')['partmsg'] or "Einsatzteilnehmer bestaetigt."
+        bot.sendMessage(update.message.chat_id, text=msgtext.format(vorname=update.message.from_user.first_name, nachname=update.message.from_user.last_name))
+        
+        
+    @staticmethod
+    def msg_nein(bot, update, **kwargs):
+        """
+        reply negative alarm participation
+        :param bot:
+        :param update:
+        :param kwargs:
+        """
+        msgtext = "Einsatzteilnahme negativ."
+        bot.sendMessage(update.message.chat_id, msgtext, parse_mode='Markdown')
+        
+        
 class Mailer(Communicator):
 
     def __init__(self, **kwargs):

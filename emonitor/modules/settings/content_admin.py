@@ -94,7 +94,7 @@ def getAdminContent(self, **params):
             from emonitor.extensions import communication
             if request.method == 'POST':
                 if request.form.get('action') == 'telegramsettings':
-                    vals = Settings.get('telegramsettings')
+                    vals = Settings.get('telegramsettings', {})
                     vals['telegramkey'] = request.form.get('telegrambot').strip()
                     vals['welcomemsg'] = request.form.get('welcometext')
                     vals['helpmsg'] = request.form.get('helptext')
@@ -112,7 +112,7 @@ def getAdminContent(self, **params):
                         pass
 
                 elif request.form.get('action') == 'telegramgroups':
-                    vals = Settings.get('telegramsettings')
+                    vals = Settings.get('telegramsettings', {})
                     g = {}
                     for f in filter(lambda x: x.startswith('groupname_'), request.form):
                         _id = f.split('_')[-1]  # fieldname in form

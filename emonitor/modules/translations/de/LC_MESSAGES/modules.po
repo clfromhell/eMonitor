@@ -4189,8 +4189,8 @@ msgstr ""
 "Informationen an angemeldete Benutzer schicken."
 
 #: emonitor/modules/settings/templates/admin.settings.communication.html:89
-msgid "settings.communication.telegram.botname"
-msgstr "Telegram-Bot Name"
+msgid "settings.communication.telegram.bottoken"
+msgstr "Telegram-Bot Token"
 
 #: emonitor/modules/settings/templates/admin.settings.communication.html:96
 msgid "settings.communication.telegram.boterror"

@@ -220,8 +220,18 @@ class TelegramBot(Communicator):
         """
         msgtext = "Einsatzteilnahme positiv."
         bot.sendMessage(update.message.chat_id, msgtext, parse_mode='Markdown')
+        partVorname = update.message.from_user.first_name
+        partNachname = update.message.from_user.last_name
         msgtext = Settings.get('telegramsettings')['partmsg'] or "Einsatzteilnehmer bestaetigt."
-        bot.sendMessage(update.message.chat_id, text=msgtext.format(vorname=update.message.from_user.first_name, nachname=update.message.from_user.last_name))
+        for group, members in Settings.getYaml('telegramsettings').__dict__['groups'].items():
+                    if group == "Staerkemeldung":
+                        for member in members[:-1]:
+                            try:
+                                 bot.sendMessage(member, text=msgtext.format(vorname=partVorname, nachname=partNachname))
+                            except:
+                                print "error handleEvent"
+                            return kwargs
+       
         
         
     @staticmethod

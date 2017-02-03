@@ -1,1 +1,4 @@
 build/
+emonitor.cfg
+*.pyc
+*.log

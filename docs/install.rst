@@ -16,25 +16,10 @@ Nach der Installation von Python 2.x sind folgende Schritte erforderlich:
  > cd emonitor
  > pip install -r requirements.txt
 
-2. Installation von ImageMagick (Wird zur Umwandlung von PDF-Dateien nach PNG benötigt)
+2. Installation von externen Programmen
 ::
 
- > apt-get install imagemagick
-
-3. Installation von ghostview (wird zur Umwandlung der PDF-Dateien benötigt)
-::
-
- > apt-get install ghostview
-
-4. Installation von Ghostscript (gsprint wird zum Ausdruck der PDF-Alarmansicht benötigt)
-::
-
- > apt-get install ghostscript
-
-5. Installation von tesseract (OCR-Software)
-::
-
- > apt-get install tesseract-ocr tesseract-ocr-deu
+ > apt-get install imagemagick gv ghostscript tesseract-ocr tesseract-ocr-deu
 
 
 Installation unter Windows

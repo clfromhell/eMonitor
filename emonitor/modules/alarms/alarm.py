@@ -260,9 +260,9 @@ class Alarm(db.Model):
         :return: list grouped by state
         """
         if days != 0:
-            return db.get(Alarm.state, count(Alarm.id)).filter(Alarm.timestamp > (datetime.datetime.now() - datetime.timedelta(days=days))).order_by(Alarm.timestamp.desc()).group_by(Alarm.state).all()
+            return db.get(Alarm.state, count(Alarm.id)).filter(Alarm.timestamp > (datetime.datetime.now() - datetime.timedelta(days=days))).order_by(Alarm.timestamp.desc()).group_by(Alarm.id,Alarm.state).all()
         else:
-            return db.get(Alarm.state, count(Alarm.id)).group_by(Alarm.state).all()
+            return db.get(Alarm.state, count(Alarm.id)).group_by(Alarm.id,Alarm.state).all()
 
     @staticmethod
     def getActiveAlarms():

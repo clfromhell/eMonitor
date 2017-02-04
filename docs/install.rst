@@ -19,7 +19,7 @@ Nach der Installation von Python 2.x sind folgende Schritte erforderlich:
 2. Installation von externen Programmen
 ::
 
- > apt-get install imagemagick gv ghostscript tesseract-ocr tesseract-ocr-deu
+ > apt-get install imagemagick gv ghostscript tesseract-ocr tesseract-ocr-deu mysql-server python-mysqldb
 
 
 Installation unter Windows
@@ -72,13 +72,13 @@ Anschließend kann der Dienst über die Dienste-Verwaltung konfiguriert werden.
 Konfiguration und Hilfe
 -----------------------
 
-Parameter für convert (PDF -> PNG)
+Parameter für convert (PDF -> PNG) unter Windows
 ::
 
  > 32-bit[basepath]/bin/convert/convert32.exe -depth 32 -density 250 [incomepath][filename] -quality 100 [tmppath]
  > 64-bit[basepath]/bin/convert/convert64.exe -resize 200% -depth 32 -density 200 [incomepath][filename] -quality 100 [tmppath]
 
-Parameter für tesseract (OCR)
+Parameter für tesseract (OCR) unter Windows
 ::
 
  > 32-bit[basepath]/bin/tesseract/tesseract.exe [incomepath][filename] [tmppath] -l deu -psm  6 quiet custom

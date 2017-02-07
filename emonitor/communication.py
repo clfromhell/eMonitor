@@ -5,6 +5,7 @@ from emonitor.modules.events.eventhandler import Eventhandler
 from emonitor.modules.alarms.alarm import Alarm
 from emonitor.modules.settings.settings import Settings
 from emonitor.modules.persons.persons import Person
+from thread import start_new_thread as StartThread
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +29,7 @@ class TelegramBot(Communicator):
     logger = logging.getLogger('telegram.bot')
     logger.setLevel(logging.ERROR)
     users = Person
+    alarm_counter = 0 # Counter variable for alarm participation method
 
     def __init__(self, **kwargs):
             # Create the EventHandler and pass it your bot's token.
@@ -220,17 +222,35 @@ class TelegramBot(Communicator):
         """
         msgtext = "Einsatzteilnahme positiv."
         bot.sendMessage(update.message.chat_id, msgtext, parse_mode='Markdown')
-        partVorname = update.message.from_user.first_name
-        partNachname = update.message.from_user.last_name
-        msgtext = "Einsatzteilnehmer {vorname} {nachname} bestaetigt."
+        alarm_counter = alarm_counter + 1
+		for person in TelegramBot.users.getUsers():
+			if person.firstname == update.message.from_user['first_name'] and person.lastname == update.message.from_user['last_name']:
+				if person.remark == "Atemschutz":
+					pa_counter = pa_counter + 1
+    
+    @staticmethod
+    def pers_counter(bot, update, **kwargs):
+        """
+        count replies for alarm message
+        :param bot:
+        :param update:
+        :param kwargs:
+        """
+        alarm_counter = 0
+		pa_counter = 0
+        end_tm = time.time() + 60
+        while time.time() < end_tm:
+            pass
+        print "ALARMCOUNTER " + alarm_counter
         for group, members in Settings.getYaml('telegramsettings').__dict__['groups'].items():
             if group == "Staerkemeldung":
                 for member in members[:-1]:
                     try:
-                         bot.sendMessage(member, text=msgtext.format(vorname=partVorname, nachname=partNachname))
+                         bot.sendMessage(member, alarm_counter + " Zusagen fuer aktuellen Alarm, davon " + pa_counter + "x Atemschutz.", parse_Mode='Markdown')
                     except:
                         print "error sending participation"
                     return kwargs
+        
         
     @staticmethod
     def msg_nein(bot, update, **kwargs):
@@ -311,6 +331,7 @@ class Communication(object):
                         from telegram import InlineKeyboardMarkup, InlineKeyboardButton
                         args = {'id': int(kwargs.get('alarmid')), 'style': params['style'], 'addressees': members[:-1], 'keyboard': InlineKeyboardMarkup, 'button': InlineKeyboardButton}
                         attrs = Alarm.getExportData('telegram', **args)
+                        StartThread(pers_counter,(bot, update, **kwargs))
                         for member in members[:-1]:
                             if params['id'] == 'alarmid':  # send alarm details with location
                                 try:
@@ -327,3 +348,4 @@ class Communication(object):
                 pass
 
         return kwargs
+

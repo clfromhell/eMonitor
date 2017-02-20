@@ -6,9 +6,9 @@ breadcrumb: Faxchecker
 
 ### Faxerkennung
 
-Das Layout der Faxdepeschen variiert von ILS zu ILS. Um flexibel auf die unterschiedlichen Layouts reagieren zu können, 
-ist eine Programmierschnittstelle in eMonitor enthalten. Über diese Schnittstelle können die Feldinformationen angepasst an die 
-Verarbeitung weitergeleitet werden. 
+Das Layout der Faxdepeschen variiert von ILS zu ILS. Um flexibel auf die unterschiedlichen Layouts reagieren zu können,
+ist eine Programmierschnittstelle in eMonitor enthalten. Über diese Schnittstelle können die Feldinformationen angepasst an die
+Verarbeitung weitergeleitet werden.
 Standardmäßig sind folgende Layouts bereits umgesetzt und werden mitgeliefert:
 
 - Beispiellayout ILS
@@ -16,28 +16,32 @@ Standardmäßig sind folgende Layouts bereits umgesetzt und werden mitgeliefert:
 
 #### NEU: Universeller Faxchecker auf RegEx-Basis
 
-Es hat sich gezeigt, dass eine flexiblere Lösung notwendig ist, die alleine über Felder angepasst werden kann. Daraus ist ein neuer Faxchecker entstanden, der über Reguläre 
-Ausdrücke die einzelnen Felder definiert und daraus den Einsatz erstellt. Zusätzlich besteht die Möglichkeit, dass die Definition der Layouts durch Export/Import-Schnittstellen 
+Es hat sich gezeigt, dass eine flexiblere Lösung notwendig ist, die alleine über Felder angepasst werden kann. Daraus ist ein neuer Faxchecker entstanden, der über Reguläre
+Ausdrücke die einzelnen Felder definiert und daraus den Einsatz erstellt. Zusätzlich besteht die Möglichkeit, dass die Definition der Layouts durch Export/Import-Schnittstellen
 einfach ausgetauscht werden kann. Diese Schnittstelle ist aktuell getestet mit folgenden Layouts:
 
-- [**Feuerwehreinsatzzentrale München Land**][1]
+- [**Feuerwehreinsatzzentrale München Land**][1] (Lkr. M)
 
-- [**Integrierte Leitstelle Oberland**][2]
+- [**Integrierte Leitstelle Erding**][2] (Lkr. ED)
 
-- [**Integrierte Leitstelle Regensburg**][3]
+- [**Integrierte Leitstelle Oberland**][3] (Lkr. TÖL, GAP, WM)
 
-- [**Integrierte Leitstelle Dresden**][4]
+- Integrierte Leitstelle Fürstenfeldbruck (in Arbeit)
+
+- [**Integrierte Leitstelle Regensburg**][4] (Lkr. R)
+
+- [**Integrierte Leitstelle Dresden**][5] (Lkr. DD)
 
 (Definitionen als Download)
 
-Weitere Leitstellen können ergänzt werden und an dieser Stelle heruntergelden werden, wenn sie zur Verfügung gestellt werden)
+Weitere Leitstellen können ergänzt werden und an dieser Stelle heruntergeladen werden.
 
 #### Schnittstelle
 
-Im Verzeichnis *emonitor/modules/alarms/inc/* können Python-Implementierungen der Klasse *AlarmFaxChecker* (emonitor/modules/alarms/alarmutils.py) 
+Im Verzeichnis *emonitor/modules/alarms/inc/* können Python-Implementierungen der Klasse *AlarmFaxChecker* (emonitor/modules/alarms/alarmutils.py)
 hochgeladen werden. Diese Implementierungen können im Administrationsbereich hochgeladen und eingebunden werden und beim Faxempfang für die Verarbeitung genutzt werden.
 
-Dabei werden bei der Implementierung Stichworte definiert, die im Text vorkommen müssen, dass das System erkennt, dass es sich um ein Fax einer 
+Dabei werden bei der Implementierung Stichworte definiert, die im Text vorkommen müssen, dass das System erkennt, dass es sich um ein Fax einer
 bestimmten Leitstelle handelt. Somit können unterschiedliche Faxdepeschen mit unterschiedlichem Layout gleichzeitig verwendet werden.
 
 ```python
@@ -58,8 +62,8 @@ class ILSFaxChecker(AlarmFaxChecker):
         _str = ILSAlarmFaxChecker().fields[fieldname]
         # do something with the string and fill in the result field list
         ILSAlarmFaxChecker().fields['person'] = ('XYZ', 1)
-        
-    
+
+
     def buildAlarmFromText(self, alarmtype, rawtext):
         values = {}
         if alarmtype:
@@ -69,11 +73,11 @@ class ILSFaxChecker(AlarmFaxChecker):
             FezAlarmFaxChecker().fields['alarmtype'] = (alarmtype, 0)
         else:  # no matching alarmtype found
             return values
-            
+
         # do something with the rawtext, e.g. split in sections
         for l in rawtext.split(u"\n"):
             ...
-            
+
         return values
 ```
 
@@ -92,13 +96,13 @@ Beispiel:
  --------------------- EINSATZORT -----------------------
  .....
  ```
- 
+
  In der Implementierung wird dann der Inhalt ab *Name* bis zur neuen Zeile mit den *--* an die Methode *evalPerson* übergeben. Ziel wird es hier sein, die Inhalte aus dem Feld *Name* und der *Rufnummer* an die eMonitor-Variable *person* weiter zu geben. Die Variable erwartet dabei ein Tupel aus dem Wert und einem Index, im Beispiel 1. Damit wird gezeigt, dass der Wert für das Feld bearbeitet wurde. Ansonsten wird die *0* übergeben.
- 
+
  Auf diese Art und Weise können sämtliche Felder bearbeitet werden und an eMonitor weitergereicht werden, der daraus einen Einsatz aufbaut.
- 
+
  [1]: {{site.github.url}}/config/FEZ.cfg
- [2]: {{site.github.url}}/config/ILS_OB.cfg
- [3]: {{site.github.url}}/config/ILS_R.cfg
- [4]: {{site.github.url}}/config/ILS_DD.cfg
- 
+ [2]: {{site.github.url}}/config/ILS_ED.cfg
+ [3]: {{site.github.url}}/config/ILS_OB.cfg
+ [4]: {{site.github.url}}/config/ILS_R.cfg
+ [5]: {{site.github.url}}/config/ILS_DD.cfg

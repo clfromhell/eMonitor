@@ -241,7 +241,7 @@ class TelegramBot(Communicator):
         end_tm = time.time() + 60
         while time.time() < end_tm:
             pass
-        print "ALARMCOUNTER " + alarm_counter
+        print "ALARMCOUNTER " + alarm_counter + ", PACOUNTER " + pa_counter
         for group, members in Settings.getYaml('telegramsettings').__dict__['groups'].items():
             if group == "Staerkemeldung":
                 for member in members[:-1]:

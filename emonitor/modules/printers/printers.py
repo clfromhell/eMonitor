@@ -93,7 +93,7 @@ class Printers(db.Model):
                     tmpfile.write(Module.getPdf(params['object'].getExportData('.html', **_params)))
                 subprocess.check_output(callstring, stderr=subprocess.STDOUT, shell=True)
                 os.remove('{}{}.pdf'.format(app.config.get('PATH_TMP'), tmpfilename))
-            except WindowsError:
+            except KeyError:
                 pass
 
     @staticmethod
